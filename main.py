@@ -20,23 +20,46 @@ def handle_events():
                 return False
     return True
 
-def draw_text(screen, text, pos, font_size):
-    font = pygame.font.SysFont('LiberationMono', font_size)
-    display_text = font.render(str(text), True, config.BLACK)
-    screen.blit(display_text, (pos))
+def draw_text(screen, text, x, y, font_size, color, font_name=None, bold=False, italic=False):
+    if font_name:
+        font = pygame.font.Font(font_name, font_size)
+    else:
+        font = pygame.font.Font(None, font_size)
+    
+    font.set_bold(bold)
+    font.set_italic(italic)
+
+    text_surface = font.render(text, True, color)
+    screen.blit(text_surface, (x,y))
+    
 
 def main():
     screen = init_game()
     clock = pygame.time.Clock() # Initalize the clock here
+
+
+    text1 = 'Whats good!'
+    font_size1 = 48
+    color1 = config.BLACK
+    x1, y1 = (200, 250)
+
     running = True
     while running:
         running = handle_events()
         screen.fill(config.GREEN) # Use color from config
-        mouse_pos = pygame.mouse.get_pos()
-        draw_text(screen, mouse_pos, mouse_pos, 15) # Tells user mouse coordinates
+        
+        keys = pygame.key.get_pressed()
 
+        if keys[pygame.K_UP]:
+            y1 -= 5
+        if keys[pygame.K_DOWN]:
+            y1 += 5
+        if keys[pygame.K_LEFT]:
+            x1 -= 5
+        if keys[pygame.K_RIGHT]:
+            x1 += 5
 
-
+        draw_text(screen, text1, x1, y1, font_size1, color1)
 
         pygame.display.flip()
         # Limit the frame rate to the specified frames per second
